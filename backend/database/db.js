@@ -2,12 +2,17 @@
 const { Pool } = require('pg');
 require('dotenv').config();
 
+const host = process.env.DB_HOST || 'localhost';
+
+const precisaSSL = host !== 'localhost' && host !== '127.0.0.1';
+
 const pool = new Pool({
-    host: process.env.DB_HOST || 'localhost',
+    host,
     port: process.env.DB_PORT || 5432,
     user: process.env.DB_USER || 'postgres',
     password: process.env.DB_PASSWORD || 'postgres',
-    database: process.env.DB_NAME || 'checkup_escolar'
+    database: process.env.DB_NAME || 'checkup_escolar',
+    ssl: precisaSSL ? { rejectUnauthorized: false } : false
 });
 
 pool.on('connect', () => {
