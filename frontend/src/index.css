@@ -1,0 +1,57 @@
+body {
+  background-color: #f4f6f9;
+}
+
+.sidebar {
+  min-height: 100vh;
+  background-color: #1c2434;
+  color: #fff;
+}
+
+.sidebar .nav-link {
+  color: #cfd4dc;
+  padding: 0.65rem 1rem;
+  border-radius: 6px;
+  margin-bottom: 4px;
+}
+
+.sidebar .nav-link.active,
+.sidebar .nav-link:hover {
+  background-color: #2f81f7;
+  color: #fff;
+}
+
+.card-dashboard {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+
+.foto-aluno {
+  width: 42px;
+  height: 42px;
+  object-fit: cover;
+  border-radius: 50%;
+  background-color: #e9ecef;
+}
+
+.foto-preview {
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #dee2e6;
+}
+
+.navbar-brand-logo {
+  font-weight: 700;
+  color: #2f81f7 !important;
+}
+
+.badge-pendente {
+  background-color: #f0ad4e;
+}
+
+.badge-concluida {
+  background-color: #28a745;
+}

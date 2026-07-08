@@ -1,0 +1,71 @@
+# Blueprint do Render - permite subir banco + backend + frontend de uma vez só.
+# Como usar: no dashboard do Render, clique em "New" > "Blueprint" e aponte
+# para este repositório. O Render vai ler este arquivo e criar os 3 serviços
+# automaticamente, já conectados entre si.
+
+databases:
+  - name: checkup-escolar-db
+    plan: free
+    postgresMajorVersion: "16"
+
+services:
+  # ---------- BACKEND (API Node.js + Express) ----------
+  - type: web
+    name: checkup-escolar-backend
+    runtime: node
+    plan: free
+    rootDir: backend
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: DB_HOST
+        fromDatabase:
+          name: checkup-escolar-db
+          property: host
+      - key: DB_PORT
+        fromDatabase:
+          name: checkup-escolar-db
+          property: port
+      - key: DB_USER
+        fromDatabase:
+          name: checkup-escolar-db
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: checkup-escolar-db
+          property: password
+      - key: DB_NAME
+        fromDatabase:
+          name: checkup-escolar-db
+          property: database
+      - key: JWT_SECRET
+        generateValue: true
+      - key: FRONTEND_URL
+        value: https://checkup-escolar-frontend.onrender.com
+      # Configure estes dois manualmente no dashboard do Render após o deploy
+      # (ex: usando uma conta gratuita do https://ethereal.email para testes)
+      - key: EMAIL_USER
+        sync: false
+      - key: EMAIL_PASS
+        sync: false
+      - key: EMAIL_HOST
+        value: smtp.ethereal.email
+      - key: EMAIL_PORT
+        value: 587
+
+  # ---------- FRONTEND (site estático gerado pelo Vite) ----------
+  - type: web
+    name: checkup-escolar-frontend
+    runtime: static
+    plan: free
+    rootDir: frontend
+    buildCommand: npm install && npm run build
+    staticPublishPath: dist
+    envVars:
+      - key: VITE_API_URL
+        value: https://checkup-escolar-backend.onrender.com/api
+    routes:
+      # Necessário para o React Router funcionar em qualquer rota (ex: /alunos)
+      - type: rewrite
+        source: /*
+        destination: /index.html
